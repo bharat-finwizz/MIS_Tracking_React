@@ -1,0 +1,53 @@
+html{
+    height: 100vh;
+  }
+
+body{
+    min-height: 100%;
+}
+
+
+.LogOut{
+    display: flex;
+    margin: 0px 5px 0px 6px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.notification{
+    cursor: pointer;
+    white-space: nowrap;
+    margin: 0px 5px 0px 5px;
+}
+
+.userName{
+    cursor: pointer;
+    white-space: nowrap;
+    margin: 0px 5px 0px 5px;
+}
+
+.currentDate{
+    cursor: pointer;
+    white-space: nowrap;
+    margin: 0px 5px 0px 5px; 
+}
+
+.Box{
+    height: 100vh;
+}
+#leftBox{
+    margin-left: -40px;
+    margin-right: 20px;
+}
+
+#rightBox{
+    margin-right: -40px;
+    
+}
+.rightSideBox{
+    width: 30%;
+    height: 100vh;
+    margin-top: 50px;
+    border: 1px solid grey;
+}
+
