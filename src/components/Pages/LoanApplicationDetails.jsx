@@ -1,4 +1,5 @@
 import React, { useEffect, useState  } from "react";
+
 import LogoNavbar from "../Navbar/LogoNavbar";
 import "./LoanApplicationDetails.css";
 import { Country, State, City } from "country-state-city";
@@ -8,119 +9,43 @@ import Select from "react-select";
 
 import Pincode from 'react-pincode';
 
-
+import PincodeCompo from "./PincodeClassBased";
 
 
 
 
 
 const LoanApplicationDetails = () => {
-
-  // const [pincodeData, setPincodeData] = useState('');
-
-  // const onChange = (e) => {
-  //   console.log("onChange called");
-  //   pincodeData({ [e.target.name]: e.target.value });
-  //   console.log(e.target.value);
-  //   if (e.target.value.length === 6) {
-  //     pincodeData({
-  //       error: '',
-  //     });
-  //     fetch(`https://api.postalpincode.in/pincode/${e.target.value}`, {
-  //       method: 'GET',
-  //     })
-  //       .then((res) => res.json())
-  //       .then((res) => {
-  //         console.log(res);
-  //         setPincodeData(
-  //           {
-  //             stateName: res[0].PostOffice[0].State,
-  //             city: res[0].PostOffice[0].Block,
-  //             district: res[0].PostOffice[0].District,
-  //             areaName: res[0].PostOffice[0].Name,
-  //           },
-  //           () => {
-  //             const data = this.state;
-  //             this.props.getData(data);
-            
-  //           }
-  //         );
-  //       })
-  //       .then(() => {
-  //         document.getElementById('pincode').classList.remove('error');
-  //       })
-  //       .catch((err) => {
-  //         document.getElementById('pincode').className = 'error';
-  //         setPincodeData({
-  //           error: `${props.invalidError || 'Invalid PIN Code'}`,
-  //         });
-  //       });
-  //   }
-  //   if (e.target.value.length !== 6) {
-  //     setPincodeData({
-  //       city: '',
-  //       stateName: '',
-  //       district: '',
-  //       error: `${props.lengthError || 'Pincode must be of 6 digits'}`,
-  //     });
-  //   }
-  // }
+  //all  states
+  const [pincodeData, setPincodeData] = useState('');
+  const [applicantnofirst, setApplicantnofirst] = useState(0);
+  const [applicantnoSecond, setApplicantnoSecond] = useState(0);
+ 
+;
+  // Buttion function Handled
+  const onSaveHandled = () => {
+      alert("Data saved Successfully")
+  }
+  const onEditHandled = () => {
+      alert("Edit Button clicked ")
+  }
+  const onDeleteHandled = () => {
+      alert("Data Deleted Successfully")
+  }
+  const onExitHandled = () => {
+      alert("Exit function caleed")
+  }
 
 
+  const changeFirstApplicantno = e => {
+    setApplicantnoSecond(e.target.value);
+    setApplicantnofirst(e.target.value );
+  };
 
-
-  const addressFromik = useFormik({
-    initialValues: {
-      country: "India",
-      state: null,
-      city: null,
-    },
-    // onSubmit: (values) => console.log(JSON.stringify(values))
-  });
-
-  const countries = Country.getAllCountries();
-
-  const updatedCountries = countries.map((country) => ({
-    label: country.name,
-    value: country.id,
-    ...country,
-  }));
-
-  //   console.log(State.getStatesOfCountry());
-
-  const updatedStates = (countryId) =>
-    State.getStatesOfCountry(countryId).map((state) => ({
-      label: state.name,
-      value: state.id,
-      ...state,
-    }));
-
-  const updatedCities = (stateId) =>
-    City.getCitiesOfState(stateId).map((city) => ({
-      label: city.name,
-      value: city.id,
-      ...city,
-    }));
-
-  const { values, handleSubmit, setFieldValue, setValues } = addressFromik;
-
-  useEffect(() => {}, [values]);
-
-
-
-//Fetching city and state using postal pincode api
-
-
-
-
-
-
-
-
-
-
-
-
+  const changeSecondApplicantNo = e => {
+    setApplicantnofirst(e.target.value);
+    setApplicantnoSecond(e.target.value );
+  };
 
 
 
@@ -130,11 +55,13 @@ const LoanApplicationDetails = () => {
       <h3 className="d-flex justify-content-center">
         Loan Application Details
       </h3>
+      
       <div className="Form-Box">
         <div className="container" id="form-Container">
           <div className="row">
             <div className="col-sm-12">
-              <form role="form" onSubmit={handleSubmit} />
+              <form role="form"  />
+               
               <div className="form-group">
                 <div className="row">
                   <div className="col-sm-3">
@@ -153,11 +80,12 @@ const LoanApplicationDetails = () => {
                   </div>
                   <div className="col-sm-3">
                     <label className="control-label">Select Country:</label>
-                    {/* <select  className="form-control selectpicker"  */}
-                    <Select
+                    <select  className="form-control selectpicker" />
+                    {/* <Select
                       id="country"
                       name="country"
                       label="country"
+                     
                       options={updatedCountries}
                       value={values.country}
                       // onChange={value => {
@@ -171,32 +99,34 @@ const LoanApplicationDetails = () => {
                           false
                         );
                       }}
-                    />
+                    /> */}
                   </div>
                   <div className="col-sm-3">
                     <label className="control-label">Select State:</label>
-                    {/*  <select  className="form-control selectpicker"     */}
-                    <Select
+                    <select  className="form-control selectpicker" />
+
+                    {/* <Select
                       id="state"
                       name="state"
                       options={updatedStates(
-                        values.country ? values.country.valueOf : null
+                        values.country ? values.country.value : null
                       )}
                       value={values.state}
                       onChange={(value) => {
                         setValues({ state: value, city: null }, false);
                       }}
                     />
-                    {/* <option >Please select your State</option>
+                   */}
 										
 
 									
-							       </select> */}
+							       
                   </div>
                   <div className="col-sm-3">
                     <label className="control-label">Select City:</label>
-                    {/*  <select  className="form-control selectpicker"     */}
-                    <Select
+                    <select  className="form-control selectpicker" />
+
+                    {/* <Select
                       id="city"
                       name="city"
                       options={updatedCities(
@@ -204,16 +134,13 @@ const LoanApplicationDetails = () => {
                       )}
                       value={values.city}
                       onChange={(value) => setFieldValue("city", value)}
-                    />
+                    /> */}
 
-                    {/* <option >Please select your State</option>
-										
-
-									
-							       </select> */}
+                
                   </div>
                 </div>
-              </div>
+              </div> 
+              
               <div className="form-group">
                 <div className="row">
                   <div className="col-sm-6">
@@ -290,13 +217,13 @@ const LoanApplicationDetails = () => {
                     <label className="control-label">
                       Loan Amount Required:
                     </label>
-                    <input type="Number" className="form-control" />
+                    <input type="number" className="form-control noscroll" />
                   </div>
                   <div className="col-sm-6">
                     <label className="control-label">
                       Loan Tenure(in months):
                     </label>
-                    <input type="Number" className="form-control" />
+                    <input type="number" className="form-control noscroll" />
                   </div>
                 </div>
               </div>
@@ -335,10 +262,10 @@ const LoanApplicationDetails = () => {
                       Enter Applicant's Mobile/PAN Number:
                     </label>
 
-                    <div class="input-group mb-3">
-                      <input type="Number" class="form-control" />
-                      <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button">
+                    <div className="input-group mb-3">
+                      <input type="number" className="form-control noscroll" />
+                      <div className="input-group-append">
+                        <button className="btn btn-outline-secondary" type="button">
                           Check Dedupe
                         </button>
                       </div>
@@ -346,15 +273,16 @@ const LoanApplicationDetails = () => {
                   </div>
                   <div className="col-sm-6">
                     <label className="control-label">
-                      Enter Applicant Number:
+                      Enter Applicant number:
                     </label>
-                    <input type="Number" className="form-control" />
+                    <input type="number" min={0}  className="form-control noscroll"  value={applicantnofirst}
+                      onChange={changeSecondApplicantNo} />
                   </div>
 
-                  {/* <div class="input-group mb-3">
-  <input type="text" class="form-control"/>
-  <div class="input-group-append">
-    <button class="btn btn-outline-secondary" type="button">Button</button>
+                  {/* <div className="input-group mb-3">
+  <input type="text" className="form-control"/>
+  <div className="input-group-append">
+    <button className="btn btn-outline-secondary" type="button">Button</button>
   </div>
 </div> */}
                 </div>
@@ -401,28 +329,21 @@ const LoanApplicationDetails = () => {
               </div>
 
               <div className="form-group">
-                <div className="row">
-                  <div className="col-sm-4">
-                    <label className="control-label">Enter Pincode:</label>
-                    <input type="Number" className="form-control" 
-            id="pincode" />
-                  </div>
-                  <div className="col-sm-4">
-                    <label className="control-label">State:</label>
-                    <input type="Text" className="form-control" />
-                  </div>
-                  <div className="col-sm-4">
-                    <label className="control-label">City:</label>
-                    <input type="Text" className="form-control" />
-                  </div>
-                </div>
+                <PincodeCompo 
+                   invalidError="Please Enter a valid pincode"
+                   lengthError="Pincode Length must be of 6 digits"
+                   getData={(data) => setPincodeData(data)}
+                   
+                   />
+                   
+             
               </div>
 
               <div className="form-group">
                 <div className="row">
                   <div className="col-sm-6">
-                    <label className="control-label">Mobile Number:</label>
-                    <input type="Number" className="form-control" />
+                    <label className="control-label">Mobile number:</label>
+                    <input type="number" className="form-control noscroll" />
                   </div>
                   <div className="col-sm-6">
                     <label className="control-label">Email:</label>
@@ -438,15 +359,15 @@ const LoanApplicationDetails = () => {
               <div className="form-group">
                 <div className="row">
                   <div className="col-sm-4">
-                    <label className="control-label">PAN Number:</label>
+                    <label className="control-label">PAN number:</label>
                     <input type="Text" className="form-control" />
                   </div>
                   <div className="col-sm-4">
-                    <label className="control-label">Adhar Number:</label>
-                    <input type="Number" className="form-control" />
+                    <label className="control-label">Adhar number:</label>
+                    <input type="number" className="form-control noscroll" />
                   </div>
                   <div className="col-sm-4">
-                    <label className="control-label">GST Number:</label>
+                    <label className="control-label">GST number:</label>
                     <input type="Text" className="form-control" />
                   </div>
                 </div>
@@ -480,31 +401,35 @@ const LoanApplicationDetails = () => {
                     <label className="control-label">
                       <span >
                         If Above All Details are Correct, Please Generate a
-                        Application Number:
+                        Application number:
                       </span>
                     </label>
 
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary" type="button">
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                        <button className="btn btn-outline-secondary" type="button" >
                           Generate
                         </button>
                       </div>
                       <input
-                        type="Number"
-                        placeholder="System will Generate this Number"
+                        type="number"
+                        placeholder="System will Generate this number"
+                        
                         disabled
-                        class="form-control"
+                        className="form-control noscroll"
                       />
                     </div>
                   </div>
                   <div className="col-sm-6">
-                    <label className="control-label">Applicant Number:</label>
+                    <label className="control-label">Applicant number:</label>
                     <input
-                      type="Number"
-                      placeholder="Earlier One"
+                      type="number"
+                      placeholder=""
                       disabled
-                      className="form-control"
+                      value={applicantnoSecond}
+                      onChange={changeFirstApplicantno}
+                      className="form-control noscroll"
+                      
                     />
                   </div>
                 </div>
@@ -515,25 +440,25 @@ const LoanApplicationDetails = () => {
               <div className="form-group">
                 <div className="row" >
                  
-    {/* <div class="btn-group"> */}
+    {/* <div className="btn-group"> */}
     <div className="col-sm-3">
-    <button type="button" class="btn btn-success fourButtons" >
-            <i class="bi-eye"></i> Save
+    <button type="button" className="btn btn-success fourButtons" onClick={onSaveHandled} >
+            <i className="bi-eye"></i> Save
         </button>
 </div>
 <div className="col-sm-3">
-<button type="button" class="btn btn-warning fourButtons" >
-            <i class="bi-pencil"></i> Edit
+<button type="button" className="btn btn-warning fourButtons" onClick={onEditHandled} >
+            <i className="bi-pencil"></i> Edit
         </button>
 </div>
 <div className="col-sm-3">
-<button type="button" class="btn btn-danger fourButtons">
-            <i class="bi-trash"></i> Delete
+<button type="button" className="btn btn-danger fourButtons" onClick={onDeleteHandled}>
+            <i className="bi-trash"></i> Delete
         </button>
 </div>
 <div className="col-sm-3">
-<button type="button" class="btn btn-secondary fourButtons" >
-            <i class="bi bi-x-circle"></i> Exit
+<button type="button" id="exitButton" className="btn btn-secondary fourButtons" onClick={onExitHandled} >
+            <i className="bi bi-x-circle"></i> Exit
         </button>
 </div>
         
