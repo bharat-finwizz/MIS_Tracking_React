@@ -22,9 +22,9 @@ function App() {
 <h3>This will be our Home page After User logged in </h3>
 <Home/>
 
-<h3>MIS Login Page</h3>
+<h3>MIS Login Page</h3> */}
 
-<LoanApplicationDetails/> */}
+{/* <LoanApplicationDetails/> */}
 
     <StatusUpdation/>
 </>
