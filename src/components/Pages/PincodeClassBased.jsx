@@ -32,7 +32,7 @@ class Pincode extends Component {
               stateName: res[0].PostOffice[0].State,
               city: res[0].PostOffice[0].Block,
               district: res[0].PostOffice[0].District,
-            //   areaName: res[0].PostOffice[0].Name,
+              areaName: res[0].PostOffice[0].Name,
             },
             () => {
               const data = this.state;
@@ -89,6 +89,15 @@ class Pincode extends Component {
         display: this.props.showDistrict,
       },
       {
+        name: 'Area',
+        placeholder: 'Area',
+        disabled: true,
+        value: this.state.areaName,
+        // style: this.props.districtInput || {},
+        containerStyle: this.props.areaContainer || {},
+        display: this.props.showArea,
+      },
+      {
         name: 'State',
         placeholder: 'State',
         disabled: true,
@@ -140,7 +149,8 @@ class Pincode extends Component {
                
         <div className="col-sm-3"  style={field.containerStyle} key={field.name}>
           <label className="control-label">{field.name}</label>
-          <input type="String" className="form-control" disabled={field.disabled} placeholder={field.placeholder} value={field.value}  />
+          <input type="String"
+                       className="form-control" disabled={field.disabled} placeholder={field.placeholder} value={field.value}  />
         </div>
        
            )

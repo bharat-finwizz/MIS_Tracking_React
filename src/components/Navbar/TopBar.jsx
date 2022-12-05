@@ -34,7 +34,7 @@ const TopBar = () => {
   </div>
 
 {/* Navbar */}
-  <nav className="navbar navbar-expand-lg navbar-light bg-white py-3 top-shadow">
+  <nav className="navbar navbar-expand-lg navbar-light bg-white py-3 top-shadow  ">
     <div className="container"> <a href="https://saralloan.com" className="navbar-brand">
         <img src="https://saralloan.com/wp-content/themes/saralloan/images/logo.png"
          alt= "Borrow - Loan Company Website Template" /></a>

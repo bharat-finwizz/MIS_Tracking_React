@@ -1,21 +1,20 @@
 import React from 'react'
+import ManageDoument from './ManageDoument'
 
-const StatusUpdation = () => {
-    const onEditHandled = () => {
-        alert("Are you sure you want to edit?")
-    }
-
+const Activity_Remark = () => {
 
     const onSearchHandled = () =>{
         alert("Searching in the Database...")
     }
   return (
-     <>
+      <>
 
 <h3 className="d-flex justify-content-center">
-        Loan Application Processing: Status Updation
+       Update Documentation Activity Remarks
       </h3>
-<div className="Form-Box">
+
+
+      <div className="Form-Box">
         <div className="container" id="form-Container">
           <div className="row">
             <div className="col-sm-12">
@@ -143,86 +142,78 @@ const StatusUpdation = () => {
                       className="form-control selectpicker"
                     >
                       <option value="">Select a Processing Activity</option>
-                      <option value="Dedupe" >Dedupe</option>
-                      <option value="Credit Bureau">Credit Bureau</option>
-                      <option value="PD">PD</option>
-                      <option value="FI">FI</option>
-                      <option value="Profile type">Profile Type</option>
-                      <option value="Preliminary">Preliminary</option>
-                      <option value="Detailed">Detailed</option>
-                      <option value="Sanction">Sanction</option>
-                      <option value="Disbursal">Disbursal</option>
+                      <option value="Documentation Submission" >Documentation Submission</option>
+                      <option value="Follow up">Follow up</option>
+                      <option value="Response from Sales Person">Response from Sales Person</option>
+                     
                     
                     </select>
                     </div>
 
                     </div>
-
-                    <div className="col-sm-4">
-                  <label className="control-label">Business vintage:</label>
-                  <div className="input-group mb-3">
-                      <input type="text"  className="form-control noscroll" />
-                     
-                    </div>
-
-                    </div>
-
-                    <div className="col-sm-4">
-                  <label className="control-label">DSCR/FOIR:</label>
-                  <div className="input-group mb-3">
-                      <input type="text"  className="form-control noscroll" />
-                     
-                    </div>
-
-                    </div>
-
                     </div>
                     </div>
 
+                    {/* Fifth Row */}
+                    <ManageDoument/>
 
-  {/* Fifth Row */}
+{/* Sixth Row */}
+<div className="form-group">
+                <div className="row">
+                  <div className="col-sm-12">
+                    <label className="control-label">Purpose of Communication:</label>
+                    <textarea
+                      id="message"
+                      className="form-control"
+                      rows="3"
+                      name="message"
+                    ></textarea>
+                  </div>
+                  </div>
+                  </div>
 
-                    <div className="form-group">
+
+
+{/* Seventh Row */}
+                  <div className="form-group">
                 <div className="row">
                 <div className="col-sm-4">
-                  <label className="control-label">No of EMI/Cheque Bounces:</label>
+                  <label className="control-label">Documents Submission Status:</label>
                   <div className="input-group mb-3">
-                      <input type="text"  className="form-control noscroll" />
-                     
-                    </div>
-
-                    </div>
-                    <div className="col-sm-4">
-                  <label className="control-label">Average Bank Balance:</label>
-                  <div className="input-group mb-3">
-                      <input type="text"  className="form-control noscroll" />
-                     
-                    </div>
-
-                    </div>
-
-
-                    <div className="col-sm-4">
-                  <label className="control-label">Processing Result:</label>
-                  <select
+                      
+                      <select
                       name="sourcing"
                       className="form-control selectpicker"
                     >
-                      <option value="">Select a Processing Result</option>
-                      <option value="Positive">Positive</option>
-                      <option value="Negative">Negative</option>
-                   </select>
-
-
+                      <option value="">Select a Processing Activity</option>
+                      <option value="Completed" >Completed</option>
+                      <option value="Pending
+                      " >Pending</option>
+                      
+                     
+                    
+                    </select>
+                    </div>
 
                     </div>
-                </div>
-                </div>
-
-
-  {/* Sixth Row */}
-
-                <div className="form-group">
+                    </div>
+                    </div>
+{/* Eigth Row */}
+<div className="form-group">
+                <div className="row">
+                  <div className="col-sm-12">
+                    <label className="control-label">Document Submission Remarks:</label>
+                    <textarea
+                      id="message"
+                      className="form-control"
+                      rows="3"
+                      name="message"
+                    ></textarea>
+                  </div>
+                  </div>
+                  </div>
+                  {/* Nith Row Buttons */}
+                  <div className="form-group">
                 <div className="row">
                   <div className="col-sm-12">
                     <label className="control-label">Processing Remarks:</label>
@@ -239,39 +230,28 @@ const StatusUpdation = () => {
 
                   <div className="form-group">
                 <div className="row">
-                  <div className="col-sm-6">
-<button type="button  " onClick={onEditHandled} className="btn btn-warning fourButtons w-50 py-2 "  >
-            <i className="bi-pencil"></i> Update Processing Details
+                  <div className="col-sm-7">
+<button type="button  "  className="btn btn-warning fourButtons w-50 py-2 "  >
+            <i className="bi-pencil"></i> Update Documentations Details
         </button>
 </div>
 
 
-<div className="col-sm-6">
+<div className="col-sm-5">
 <button type="button" id="exitButton" className="btn btn-secondary fourButtons"  >
             <i className="bi bi-x-circle"></i> Cancel
         </button>
 </div>
 </div>
 </div>
-
-
-
-
-
-
-
-<form/>
+                    <form/>
 
 </div>
 </div>
 </div>
 </div>
-
-
-
-
-     </>
+      </>
   )
 }
 
-export default StatusUpdation
+export default Activity_Remark

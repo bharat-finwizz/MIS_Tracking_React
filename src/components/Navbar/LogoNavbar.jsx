@@ -1,14 +1,20 @@
-import React from 'react'
+
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import '../HomePage/HomePage.css';
+import TopBar from './TopBar';
+import LoanApplicationDetails from '../Pages/LoanApplicationDetails';
 
-const LogoNavbar = () => {
+
+const LogoNavbar = (props) => {
+
+
+
     const currentDate = new Date();
     const date = `${currentDate.getDate()}/${currentDate.getMonth()+1}/${currentDate.getFullYear()}`;
-    const userName = 'Swapnil'; 
+    const userName = 'Swapnil-0001'; 
   return (
    
   
@@ -29,8 +35,9 @@ const LogoNavbar = () => {
       </div>
     </div>
   </div>
+  {/* <TopBar/> */}
 
-<nav className="navbar navbar-expand-lg navbar-light bg-white py-3 top-shadow">
+<nav className="navbar navbar-expand-lg navbar-light bg-white py-3 top-shadow sticky-top ">
 <div className="container"> <a href="https://saralloan.com" className="navbar-brand mx-4">
     <img src="https://saralloan.com/wp-content/themes/saralloan/images/logo.png"
      alt= "Borrow - Loan Company Website Template" /></a>
@@ -50,6 +57,7 @@ const LogoNavbar = () => {
 
 </nav>
 <hr className="divider mt-0" />
+
 </>
   )
 };

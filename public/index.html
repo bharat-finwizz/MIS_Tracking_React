@@ -12,13 +12,18 @@
 />
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
 
 
     <meta name="theme-color" content="#000000" />
@@ -56,21 +61,127 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  </body>
-  <script type="text/javascript">
-    //Date picker function
-    $(function() {
-        $('#datepicker').datepicker();
-    });
+    <script type="text/javascript">
+      //Date picker function
+$(function() {
+    $('#datepicker').datepicker();
+});
+    </script>
 
+ <!-- //no Scroll function for input box type = number  -->
+    <script type="text/javascript">
+      document.addEventListener("wheel", function(event) {
+if (document.activeElement.type === "number" &&
+document.activeElement.classList.contains("noscroll")) {
+document.activeElement.blur();
+}
+});
+    </script>
 
-
-    //no Scroll function for input box type = number
-    document.addEventListener("wheel", function(event) {
-  if (document.activeElement.type === "number" &&
-    document.activeElement.classList.contains("noscroll")) {
-    document.activeElement.blur();
-  }
+<script type="text/javascript">
+  $(document).ready(function(){
+// Activate tooltip
+$('[data-toggle="tooltip"]').tooltip();
+// Select/Deselect checkboxes
+var checkbox = $('table tbody input[type="checkbox"]');
+$("#selectAll").click(function(){
+if(this.checked){
+checkbox.each(function(){
+this.checked = true;
+});
+} else{
+checkbox.each(function(){
+this.checked = false;
+});
+}
+});
+checkbox.click(function(){
+if(!this.checked){
+$("#selectAll").prop("checked", false);
+}
+});
 });
 </script>
+
+<script type="text/javascript" >
+  
+var eventname = document.getElementById("modal_event_name").textContent;
+var eventstartdate  = document.getElementById("modal_event_startdate").textContent;
+var eventcityname  = document.getElementById("modal_city_name").textContent;
+
+var facebookLink = "https://www.facebook.com/?" + eventname + "&" + eventstartdate + "&" + eventcityname
+
+var linkedinLink = "http://www.linkedin.com/?" + eventname + " & " + eventstartdate + "&" + eventcityname 
+
+$('.share_list_popup ul').append('<li><a href="' + facebookLink + '">Facebook</a></li>');
+$('.share_list_popup ul').append('<li><a href="' + linkedinLink + '">LinkedIn</a></li>');
+
+function showModal() {
+$('#share12').modal('show');
+}
+</script>
+
+<script type="text/javascript">
+  
+  $(document).ready(function(){
+	$('[data-toggle="tooltip"]').tooltip();
+	var actions = $("table td:last-child").html();
+	// Append table with add row form on add new button click
+    $(".add-new").click(function(){
+		$(this).attr("disabled", "disabled");
+		var index = $("table tbody tr:last-child").index();
+        var row = '<tr>' +
+            '<td><span class="custom-checkbox"><input type="checkbox" id="checkbox1" name="options[]" value="1"/><label for="checkbox1"></label></span></td>' +
+            '<td><input type="text" class="form-control" name="department" id="department"></td>' +
+            '<td><input type="text" class="form-control" name="phone" id="phone"></td>' +
+			'<td>' + actions + '</td>' +
+        '</tr>';
+    	$("table").append(row);		
+		$("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+	// Add row on add button click
+	$(document).on("click", ".add", function(){
+		var empty = false;
+		var input = $(this).parents("tr").find('input[type="text"]');
+        input.each(function(){
+			// if(!$(this).val()){
+			// 	$(this).addClass("error");
+			// 	empty = true;
+			// } else{
+      //           $(this).removeClass("error");
+      //       }
+		});
+		$(this).parents("tr").find(".error").first().focus();
+		if(!empty){
+			input.each(function(){
+				$(this).parent("td").html($(this).val());
+			});			
+			$(this).parents("tr").find(".add, .edit").toggle();
+			$(".add-new").removeAttr("disabled");
+		}		
+    });
+	// Edit row on edit button click
+	$(document).on("click", ".edit", function(){		
+        $(this).parents("tr").find("td:not(:last-child)").each(function(){
+			$(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">'  );
+		
+    
+    
+    
+    });		
+		$(this).parents("tr").find(".add, .edit").toggle();
+		$(".add-new").attr("disabled", "disabled");
+    });
+	// Delete row on delete button click
+	$(document).on("click", ".delete", function(){
+        $(this).parents("tr").remove();
+		$(".add-new").removeAttr("disabled");
+    });
+});
+
+</script>
+  </body>
+ 
+
 </html>
