@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 
 // import './App.css';
 class Pincode extends Component {
@@ -6,6 +6,7 @@ class Pincode extends Component {
     super(props);
 
     this.state = {
+      
       pincode: '',
       city: '',
       district: '',
@@ -26,7 +27,7 @@ class Pincode extends Component {
       })
         .then((res) => res.json())
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           this.setState(
             {
               stateName: res[0].PostOffice[0].State,
@@ -58,9 +59,11 @@ class Pincode extends Component {
         error: `${this.props.lengthError || 'Pincode must be of 6 digits'}`,
       });
     }
+    // console.log(useState);
   }
   render() {
     const inputFields = [
+
     //   {
     //     name: 'Area',
     //     placeholder: 'Area Name',

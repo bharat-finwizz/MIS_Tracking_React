@@ -1,167 +1,236 @@
-import React from "react";
 import { useState, useEffect } from "react";
+// import "./Login.css";
+import { useNavigate } from "react-router-dom";
+import * as React from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import LogoNavbar from "../Navbar/LogoNavbar";
+import LoanApplicationDetailsService from "../../Services/LoanApplicationDetails.service";
+import { useMemo } from "react";
 
-import { useNavigate} from 'react-router-dom';
-const Login = () => {
+
+const Login = ({setUserName}) =>{
+
+const [usernamewhenloggedIn, setUsernamewhenloggedIn] = useState('')
+  // console.log("inital value: " + UserName);
+
+
+
+ const [isLoggedIn, setisLoggedIn] = useState(false);
+
+
+  let navigate = useNavigate();
+  const [login, setLogin] = useState({
+    username: "",
+    password: "",
+  });
+  // const[LoggedIn,setLoggedIn]= useState("no")
   // let navigate=useNavigate();
-  //     const [userid,setUserid]=useState("");
-  //     const [password,setPassword]=useState("");
+  function failedtoast() {
+    toast.error(" User not found !", {
+      position: "top-center",
+    });
+  }
+
+  function successtoast() {
+    toast.success("Login Successful !", {
+      position: "top-center",
+    });
+  }
+
+  const { username, password } = login;
+
+  const handleInputChange = (e) => {
+    setLogin({ ...login, [e.target.name]: e.target.value });
+  };
+
+  useEffect(() => {}, []);
+
+  const Login = async (e) => {
+    e.preventDefault();
+
+// try {
+//   LoanApplicationDetailsService.userLogin(login).then((res) =>{
+// if(res.status==200){
+//     console.log("Login successful");
+//      navigate("/home");
+  
+// }
+//   }).catch((err) => { console.log(err);})
+// } catch (error) {
+  
+// }
+
+    // try{
+    //   console.log(login);
+    //   return await axios.post(`http://localhost:8080/login`,login , {
+        
+    //   })
+    //   .then((response) => {
+    //    console.log("login successful")
+    //     // successtoast()
+    //   // setLoggedIn("yes")
+    //   navigate("/home");
+    //   //  console.log(LoggedIn)
+    //   })
+    // }
+    //   catch(error){
+    //     console.log(error);
+    //       failedtoast()
+    //   }
+
+    try {
+      // console.log(login);
+      return await LoanApplicationDetailsService.executeBasicAuthenticationService(
+        login.username,
+        login.password
+      )
+        .then((response) => {
+          // console.log(response);
+          setUsernamewhenloggedIn(response.data);
+// console.log(usernamewhenloggedIn);
+successtoast();
+          LoanApplicationDetailsService.registerSuccessfulLogin(
+            login.username,
+            login.password
+          )
+          setisLoggedIn(true);
+     
+         
+          
+        })
+        .catch((error) => {
+          console.log(error);
+          failedtoast();
+        });
+    } catch (error) {
+      console.log(error);
+      failedtoast();
+    }
+  };
+
+  // console.log(sessionStorage.getItem("authenticatedUser"));
 
 
-  //     useEffect(()=>{
-  //       if(localStorage.getItem('user-info'))
-  //       {
-  //       navigate('/homepage');
-  //     }
 
-  //     },[])
-  //    async function Login()
-  //     {
-  //       console.warn(userid,password)
-  //       let item={userid,password};
-  //       let result=await fetch("http://localhost:8020/login",{
-  //         method:'GET',
-  //         headers:{
-  //           "Content-Type":"application/json",
-  //           "Accept":"application/json"
-  //         },
-  //         body:JSON.stringify(item)
+  // console.log(usernamewhenloggedIn);
+
+  // const usermemo = useMemo( () =>(
+  //   {
+  
+  //      userName : usernamewhenloggedIn
+  // }), [usernamewhenloggedIn]  );
+  useEffect(() => {
+
+  // console.log("I am logged in useffect");
+  // console.log(  sessionStorage.getItem('authenticatedUser'));
+  // setUserName(usernamewhenloggedIn)
+  setUserName(sessionStorage.getItem('authenticatedUser'));
+    
+  }, [usernamewhenloggedIn]);
+ 
+
+  useEffect(() =>{
+    if(isLoggedIn===true)
+    {
+   
+      navigate("/home")
+    
+    }else{
+      navigate("/");
+    }
+  }, [isLoggedIn,navigate]);
+  
 
 
-
-  //       });
-  //       result=await result.json();
-  //       localStorage.setItem("user-info",JSON.stringify(result))
-  //       navigate('/homepage');
-  //     }
 
 
   return (
     <>
-      {/* <section className="vh-100">
-  <div className="container py-5 h-100 justify-content-center align-items-center">
-    <div className="row d-flex justify-content-center align-items-center h-100">
-      <div className="col-xl-10">
-        <div className="card rounded-3 text-black">
-          <div className="row g-0">
-            <div className="col-lg-6">
-              <div className="card-body d-flex justify-content-center">
-              <form>
-                  <p className="text-justify">Please login to your account</p>
-                  
-                  <div className="form-outline mb-4 justify-content-center align-items-center">
-                  <label className="form-label" htmlFor="form2Example11">User id</label>
-                    <input type="email" id="form2Example11" className="form-control"
-                      placeholder="User id" />
-                    
-                  </div>
+      <LogoNavbar />
+      <section className="vh-100">
+        <div className="container h-100">
+          <div className="row d-flex justify-content-center align-items-center h-100">
+            <div className="col-lg-12 col-xl-11">
+              <div className="card text-black">
+                <div className="card-body p-md-5">
+                  <div className="row justify-content-center">
+                    <div className="card-body d-flex justify-content-center">
+                      <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
+                        Login into your account !
+                      </p>
 
-                  <div className="form-outline mb-4 justify-content-center align-items-center">
-                  <label className="form-label" htmlFor="form2Example22">Password</label>
-                    <input type="password" id="form2Example22" className="form-control" 
-                    placeholder="Password"/>
-                  </div>
-                  
-                  <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-  <li className="nav-item" role="presentation">
-    <button
-      className="btn btn-primary"
-      id="tab-login"
-      data-mdb-toggle="pill"
-      href="#pills-login"
-      role="tab"
-      aria-controls="pills-login"
-      aria-selected="true"
-      >Login</button>
-    
-  </li>
-  <li className="nav-item" role="presentation">
-    <button
-      className="btn btn-primary"
-      id="tab-register"
-      data-mdb-toggle="pill"
-      href="#pills-register"
-      role="tab"
-      aria-controls="pills-register"
-      aria-selected="false"
-      >Cancel</button>
-    
-  </li>
-</ul>
-  </form>
-  </div>
-      </div>
-      </div>
-      </div>
-      </div>
-      </div>
-      </div>
-      </section> */}
-
-
-<section className="vh-100" style={{marginTop: '-20px'}} >
-      <div className="container h-100">
-        <div className="row d-flex justify-content-center align-items-center h-100">
-          <div className="col-lg-12 col-xl-11">
-            <div className="card text-black">
-              <div className="card-body p-md-5">
-                <div className="row justify-content-center">
-                  <div className="card-body d-flex justify-content-center">
-
-                  <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Login into your account !</p>
-
-                    <form className="mx-1 mx-md-4" >
-
-                      <div className="d-flex flex-row align-items-center mb-4">
-                        {/* <i className="fas fa-user fa-lg me-3 fa-fw"></i> */}
-                        <div className="form-outline flex-fill mb-0">
-                        <label className="form-label" htmlFor="form3Example1c">User Id</label>
-                          {/* <input type="text" id="form3Example1c" className="form-control" placeholder="User Id" onChange={(e)=>setUserid(e.target.value)}  required/> */}
-                          <input type="text" id="form3Example1c" className="form-control" placeholder="User Id"   required/>
-
+                      <form className="mx-1 mx-md-4" onSubmit={Login}>
+                        <div className="d-flex flex-row align-items-center mb-4">
+                          <i className="fas fa-user fa-lg me-3 fa-fw"></i>
+                          <div className="form-outline flex-fill mb-0">
+                            <label className="form-label" htmlFor="form3Example1c">
+                              User Id
+                            </label>
+                            <input
+                              type="text"
+                              id="form3Example1c"
+                              className="form-control"
+                              name="username"
+                              value={username}
+                              placeholder="User Id"
+                              onChange={(e) => handleInputChange(e)}
+                              required
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <br/>
-                      <div className="d-flex flex-row align-items-center mb-4">
-                        {/* <i className="fas fa-envelope fa-lg me-3 fa-fw"></i> */}
-                        <div className="form-outline flex-fill mb-0">
-                        <label className="form-label" htmlFor="form3Example3c">Password</label>
-                          <input type="text" id="form3Example3c" className="form-control" placeholder="Password"  required/>
-                          {/* <input type="text" id="form3Example3c" className="form-control" placeholder="Password" onChange={(e)=>setPassword(e.target.value)}  required/> */}
-
+                        <br />
+                        <div className="d-flex flex-row align-items-center mb-4">
+                          <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                          <div className="form-outline flex-fill mb-0">
+                            <label className="form-label" htmlFor="form3Example3c">
+                              Password
+                            </label>
+                            <input
+                              type="text"
+                              id="form3Example3c"
+                              className="form-control"
+                              name="password"
+                              value={password}
+                              placeholder="Password"
+                              onChange={(e) => handleInputChange(e)}
+                              required
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <br/>
-                      <div className="buttons">
+                        <br />
+                        <div className="buttons">
+                          <container  is="x3d" className="text-center">
+                            <button className="btn btn-primary ms-1">Login</button>
+
+                            <button type="reset" className="btn btn-primary ms-3">
+                              Cancel
+                            </button>
+                          </container>
+                        </div>
+                        <br />
                         <div className="text-center">
-                          {/* <button className="btn btn-primary ms-1" onClick={Login}>Login</button> */}
-                          <button className="btn btn-primary ms-1" >Login</button>
-
-                          <button type="reset" className="btn btn-primary ms-3">Cancel</button>
+                          <p>
+                            Not a member?{" "}
+                            <a
+                              href="#!" /*onClick={()=>/*{navigate("/register");}}*/
+                            >
+                              Register
+                            </a>
+                          </p>
                         </div>
-                        </div>
-                      <br/>
-<div className="text-center">
-
-        {/* <p>Not a member? <a href="#!" onClick={()=>{navigate("/register");}}>Register</a></p> */}
-        <p>Not a member? <a href="#!">Register</a></p>
-      </div>
-
-                    </form>
-
+                      </form>
+                    </div>
                   </div>
-
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-
-
-
+      </section>
+      <ToastContainer />
     </>
   );
-};
+}
 export default Login;

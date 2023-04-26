@@ -51,3 +51,8 @@ body{
     border: 1px solid grey;
 }
 
+.homebtn{
+    width: 400px;
+    white-space: nowrap;
+     
+}

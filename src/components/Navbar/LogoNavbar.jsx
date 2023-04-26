@@ -6,15 +6,37 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import '../HomePage/HomePage.css';
 import TopBar from './TopBar';
 import LoanApplicationDetails from '../Pages/LoanApplicationDetails';
+import LoanApplicationDetailsService from "../../Services/LoanApplicationDetails.service";
+import { Link, useNavigate } from "react-router-dom";
+
 
 
 const LogoNavbar = (props) => {
-
+  let navigate = useNavigate();
 
 
     const currentDate = new Date();
     const date = `${currentDate.getDate()}/${currentDate.getMonth()+1}/${currentDate.getFullYear()}`;
-    const userName = 'Swapnil-0001'; 
+    const LoggedInUser = {}; 
+    // console.log(LoggedInUser);
+
+    const logout = () => {
+      console.log("Logout clicked")
+  try {
+    console.log(props.data);
+  return  LoanApplicationDetailsService.logOutUser(props.data).then((res) => {
+console.log(res);
+  }).catch((err) => {
+    console.log(err);
+  })
+ 
+   
+  } catch (error) {
+     console.log(error);
+  }
+ 
+   };
+
   return (
    
   
@@ -38,9 +60,9 @@ const LogoNavbar = (props) => {
   {/* <TopBar/> */}
 
 <nav className="navbar navbar-expand-lg navbar-light bg-white py-3 top-shadow sticky-top ">
-<div className="container"> <a href="https://saralloan.com" className="navbar-brand mx-4">
+<div className="container"> <Link to={`/home`} className="navbar-brand mx-4"> 
     <img src="https://saralloan.com/wp-content/themes/saralloan/images/logo.png"
-     alt= "Borrow - Loan Company Website Template" /></a>
+     alt= "Borrow - Loan Company Website Template" /></Link>
   <button className="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span className="icon-bar top-bar mt-0"></span> <span className="icon-bar middle-bar"></span> <span className="icon-bar bottom-bar"></span> </button>
     
 </div>
@@ -49,9 +71,9 @@ const LogoNavbar = (props) => {
 
 
 <span className="currentDate"><CalendarTodayIcon/> Todays Date:- {date}</span>
-<span className='userName'><AccountCircleIcon/> userName:-{userName}</span>
+<span className='userName'><AccountCircleIcon/> User:-{props.data}</span>
 <span className='notification'>Notifications<NotificationsIcon/></span>
-<span className='LogOut'>Log out<LogoutIcon/></span>
+<span className='LogOut' onClick={logout}>Log out<LogoutIcon/></span>
 
 </div>
 
@@ -62,4 +84,7 @@ const LogoNavbar = (props) => {
   )
 };
 
-export default LogoNavbar
+
+
+
+export default LogoNavbar;

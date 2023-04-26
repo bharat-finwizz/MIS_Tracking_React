@@ -13,10 +13,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { TextField } from "@mui/material";
 import { Link } from "react-router-dom";
-
-
-const LoanApplicationDetails = ({userName}) => {
-  console.log(userName);
+const EditLoanApplicationDetails = ({userName}) => {
+ 
+  // let userName = userName;
+// console.log(userName);
+//  console.log(userName);
   // Global Variables
   let panValueforDedupe = "";
   let panValue = "";
@@ -27,37 +28,27 @@ const LoanApplicationDetails = ({userName}) => {
   const currentStatus = "ENTR";
   let loanApplicationNumberArray = [];
   let DisplayLAP = "";
-  let pincodecity = "";
-  let pincodePINCODE;
-  let pincodeDistrict = "";
-  let pincodeArea = "";
-  let pincodeState = "";
 
   // let username = "Swapnil-0001";
-
+  const currentDate = new Date();
   // console.log(typeof(currentDate));
   // console.log(currentDate);
-         var date = new Date().getDate(); //Current Date
-          var month = new Date().getMonth() + 1; //Current Month
-          var year = new Date().getFullYear(); //Current Year
-          var hours = new Date().getHours(); //Current Hours
-          var min = new Date().getMinutes(); //Current Minutes
-          var sec = new Date().getSeconds(); //Current Seconds
+  var hours = ("0" + (currentDate.getHours() % 12 || 12)).slice(-2); //Current Hours
+  var min = ("0" + (currentDate.getMinutes() % 12) || 12).slice(-2); //Current Minutes
+  var sec = currentDate.getSeconds(); //Current Seconds
+  let todays_DateWith_Time = `${currentDate.getDate()}/${
+    currentDate.getMonth() + 1
+  }/${currentDate.getFullYear() + " " + hours + ":" + min + ":" + sec}`;
+  let todays_Date = `${currentDate.getDate()}/${
+    currentDate.getMonth() + 1
+  }/${currentDate.getFullYear()}`;
 
-
-       
-          let todays_DateWith_Time = date + '-' + month + '-' + year
-          + ' ' + hours + ':' + min + ':' + sec;
-          
-// console.log(todays_Date);
-// console.log(todays_DateWith_Time);
   // let entry_Date =  JSON.stringify(todays_Date);
-  let entry_Date = todays_DateWith_Time;
+  let entry_Date = todays_Date;
   // console.log(entry_Date);
   // console.log(entry_Date);
   // console.log(typeof(entry_Date));
 
-  // Success and Error Notifications
   const checkDedupeNotifySuccess = () =>
     toast.success("Dedupe Negative, you can processed with this application.");
   const checkDedupeNotifyFailure = () =>
@@ -71,10 +62,11 @@ const LoanApplicationDetails = ({userName}) => {
     toast.success("User Details Saved Successfully");
   const UserDetailsNOTSavedNotify = () =>
     toast.error("Please field the required fields", { position: "top-center" });
+    const UserDeletedNotify = () => toast.success("User Details Deleted Successfully");
+    const InvalidLAN = () => toast.error("Entered LAN is not valid or User with this LAN doesn't exist.");
+  
 
-  const UserDeletedNotify = () => toast.success("User Details Deleted Successfully");
-  const InvalidLAN = () => toast.error("Entered LAN is not valid or User with this LAN doesn't exist.");
-
+const updateSuccessfullyMessage = ()=> toast.success("User Details Updated Successfully",{ position: "top-center" });
 
   // Select city and state dropdown logic
   const addressFromik = useFormik({
@@ -111,8 +103,7 @@ const LoanApplicationDetails = ({userName}) => {
   useEffect(() => {}, [values]);
 
   const inputRef = useRef(null);
-  
-  
+
   // console.log(values);
   // console.log(typeof(values));
   // All REGEX patterns
@@ -137,83 +128,31 @@ const LoanApplicationDetails = ({userName}) => {
     panNumber: "",
   });
 
-  const [loanApplicationNumbertoDelete, setloanApplicationNumbertoDelete] =
+  const [loanApplicationNumbertoSearch, setloanApplicationNumbertoSearch] =
+    useState({
+      loanApplicationNumber : "",
+    });
+
+
+    const [loanApplicationNumbertoDelete, setloanApplicationNumbertoDelete] =
     useState({
       loanApplicationNumber: "",
     });
-
-// state for last_modified_date
-const [lastModifiedDate, setlastModifiedDate] = useState({
-  last_modified_date: todays_DateWith_Time,
-})
-
-
-
-  let dateValue = JSON.stringify(datepicker);
-  let loan_app_date = dateValue.slice(1, 11);
-  // console.log(loan_app_date);loanApplicationNumbertoDelete
-  // console.log(typeof dateValue);
-  // Setting default values for all form fields
-
-  const displayLoanApplicationNumber = (number) => {
-    // console.log("In Display Function Loan Application Number fn");
-    loanApplicationNumberArray =
-      number[Object.keys(number)[Object.keys(number).length - 1]];
-    DisplayLAP = loanApplicationNumberArray[0];
-    
-    alert("Your loan application number:- " + DisplayLAP);
-
-    //  console.log(DisplayLAP);
-    // alert("Your LAP Number is - " + loanApplicationNumber[0]);
-    //   number.forEach(function(message){
-    //     console.log(message)
-    // });
-  };
-
-  useEffect(() =>{
-    // OnDeleteHandle();
-  },[loanApplicationNumbertoDelete]);
-
-
-  const OnDeleteHandle = (e) => {
-    // e.preventDefault();
-
-    try {
-      // console.log(loanApplicationNumbertoDelete.loanApplicationNumber);  
-      if(LoanApplicationDetailsService.isUserLoggedIn){
-        LoanApplicationDetailsService.deleteDetails(loanApplicationNumbertoDelete.loanApplicationNumber).then((res) => {
-          UserDeletedNotify();
-        console.log("User Deleted Successfully");
-        //  console.log(res.data);
-
-      })
-      .catch((error) => {
-        console.log(error);
-        InvalidLAN();
-        console.log("Enter a Valid Application Number");
-      });
-      }else{
-        console.log("User Not Aunthenciated");
-      }
-    
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+    useEffect(() =>{
+      // OnDeleteHandle();
+    },[loanApplicationNumbertoDelete]);
   
-
- 
-  const [userDetails, setuserDetails] = useState({
+      // console.log("Before intial State" +userName);
+    const [displayUserDetails, setdisplayUserDetails] = useState({ 
     sourcing_location: "",
     sales_person: "",
     credit_manager: "",
-    entrydate: todays_DateWith_Time,
+    entrydate: entry_Date,
     date: "",
     panNumber: "",
     adhar_number: "",
     loan_product: "",
-    loan_application_date: todays_DateWith_Time,
+    loan_application_date: "",
     requested_loan_amount: "",
     loan_tenure: "",
     loan_purpose: "",
@@ -225,19 +164,179 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
     pincode: "",
     city: "",
     state: "",
-    district: "",
     mobileno: "",
     email_id: "",
     gstnumber: "",
     firm_name: "",
-    area: "",
     firm_constitution: "",
     industry_type: "",
-    entered_by: userName,
-    entered_on: todays_DateWith_Time,
-    last_modified_date: todays_DateWith_Time,
+    entered_by: '',
+    entered_on: entry_Date,
+    last_modified_date: entry_Date,
     status: currentStatus,
   });
+
+
+
+  useEffect(() => {
+         
+  //  console.log("useEffect for displayDetails");
+      setdisplayUserDetails({...displayUserDetails , entered_by: userName});
+      
+  }, [displayUserDetails.entered_by])
+  
+
+
+    const OnDeleteHandle = (e) => {
+      // e.preventDefault();
+  
+      try {
+        // console.log(loanApplicationNumbertoDelete.loanApplicationNumber);  
+        if(LoanApplicationDetailsService.isUserLoggedIn){
+          LoanApplicationDetailsService.deleteDetails(loanApplicationNumbertoDelete.loanApplicationNumber).then((res) => {
+            UserDeletedNotify();
+          // console.log("User Deleted Successfully");
+          //  console.log(res.data);
+  
+        })
+        .catch((error) => {
+          console.log(error);
+          InvalidLAN();
+          console.log("Enter a Valid Application Number");
+        });
+        }else{
+          console.log("User Not Aunthenciated");
+        }
+      
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+
+  
+
+  // console.log("After intial state log");
+  // console.log(displayUserDetails);
+ 
+
+  let dateValue = JSON.stringify(datepicker);
+  let loan_app_date = dateValue.slice(1, 11);
+  // console.log(loan_app_date);
+  // console.log(typeof dateValue);
+  // Setting default values for all form fields
+
+  const displayLoanApplicationNumber = (number) => {
+    // console.log("In Display Function Loan Application Number fn");
+    loanApplicationNumberArray =
+      number[Object.keys(number)[Object.keys(number).length - 1]];
+    DisplayLAP = loanApplicationNumberArray[0];
+    
+    //  console.log(DisplayLAP);
+    // alert("Your LAP Number is - " + loanApplicationNumber[0]);
+    //   number.forEach(function(message){
+    //     console.log(message)
+    // });
+  };
+useEffect(() =>{
+  // OnSearchHandle();
+},[loanApplicationNumbertoSearch]);
+
+  const OnSearchHandle = (e) => {
+    
+
+    try {
+      // console.log("Before Searching");
+      // console.log(displayUserDetails);
+      console.log(loanApplicationNumbertoSearch.loanApplicationNumber);
+      LoanApplicationDetailsService.getDetailsbyID(loanApplicationNumbertoSearch.loanApplicationNumber)
+        .then((res) => {
+          //  console.log(res.data);
+            setdisplayUserDetails(res.data)
+            // console.log("After Searching DisplayState");
+            // console.log(displayUserDetails);
+            // console.log("State api call data " + displayUserDetails);
+          // console.log("Details Found");
+
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log("Enter a Valid Application Number");
+          
+            
+            InvalidLAN();
+          
+          setdisplayUserDetails({
+          sourcing_location: "",
+          sales_person: "",
+          credit_manager: "",
+          entrydate: entry_Date,
+          date: "",
+          panNumber: "",
+          adhar_number: "",
+          loan_product: "",
+          loan_application_date: "",
+          requested_loan_amount: "",
+          loan_tenure: "",
+          loan_purpose: "",
+          title: "",
+          applicant_name: "",
+          applicant_address: "",
+          applicant_type: "",
+          applicant_occuption: "",
+          pincode: "",
+          city: "",
+          state: "",
+          mobileno: "",
+          email_id: "",
+          gstnumber: "",
+          firm_name: "",
+          firm_constitution: "",
+          industry_type: "",
+          entered_by: userName,
+          entered_on: entry_Date,
+          last_modified_date: entry_Date,
+          status: currentStatus,})
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // const [userDetails, setuserDetails] = useState({
+  //   sourcing_location: "",
+  //   sales_person: "",
+  //   credit_manager: "",
+  //   entrydate: entry_Date,
+  //   date: "",
+  //   panNumber: "",
+  //   adhar_number: "",
+  //   loan_product: "",
+  //   loan_application_date: "",
+  //   requested_loan_amount: "",
+  //   loan_tenure: "",
+  //   loan_purpose: "",
+  //   title: "",
+  //   applicant_name: "",
+  //   applicant_address: "",
+  //   applicant_type: "",
+  //   applicant_occuption: "",
+  //   pincode: "",
+  //   city: "",
+  //   state: "",
+  //   mobileno: "",
+  //   email_id: "",
+  //   gstnumber: "",
+  //   firm_name: "",
+  //   firm_constitution: "",
+  //   industry_type: "",
+  //   entered_by: userName,
+  //   entered_on: entry_Date,
+  //   last_modified_date: entry_Date,
+  //   status: currentStatus,
+  // });
+
+
 
   let stateVal = values.state;
   let cityVal = values.city;
@@ -260,8 +359,13 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
     console.log(loanApplicationNumbertoDelete.loanApplicationNumber);
   };
 
-
-
+  const handleOnchangeForLoanApplicationSearch = (e) => {
+    setloanApplicationNumbertoSearch(inputRef.current.value);
+    const value = e.target.value;
+    
+     setloanApplicationNumbertoSearch({...loanApplicationNumbertoSearch, loanApplicationNumber: value });
+    // console.log("Onchange vaLue" +loanApplicationNumbertoSearch.loanApplicationNumber);
+  };
   // Country state values
   // console.log(values.state);
 
@@ -281,29 +385,27 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
     // setuserDetails(userDetails.state, statevalueformusestate);
 
     // setuserDetails(userDetails.date, [])
+ 
 
-    setuserDetails({ ...userDetails, [e.target.name]: value });
+    setdisplayUserDetails({ ...displayUserDetails, [e.target.name]: value });
+    // console.log(displayUserDetails);
   };
 
   // setuserDetails({ ...userDetails, entered_by: username });
   const updateEnteredBy = () => {
-    // console.log(username);
-    pincodecity =  pincodeData.city;
-    pincodePINCODE = parseInt(pincodeData.pincode);
-    pincodeDistrict = pincodeData.district;
-    pincodeArea = pincodeData.areaName;
-    pincodeState = pincodeData.stateName;
-    
-    // console.log(pincodecity, pincodePINCODE, pincodeDistrict, pincodeArea, pincodeState);
-    setuserDetails(userDetails.city = pincodecity , userDetails.pincode = pincodePINCODE , userDetails.state =pincodeState , userDetails.area = pincodeArea , userDetails.district = pincodeDistrict ,userDetails.entered_by = userName)
-    console.log(userDetails);
-
+    console.log("In entery by" + userName);
+     
     // setuserDetails({...userDetails, entered_by: username });
     // setuserDetails({...userDetails, entered_on: entry_Date });
     // setuserDetails({...userDetails, status: 'Entry' });
-    // setuserDetails({...userDetails, loan_application_date: loan_app_date });
 
-    // console.log(userDetails);
+    
+
+    
+    // setdisplayUserDetails({...displayUserDetails, entered_by: userName})
+    // setdisplayUserDetails({...displayUserDetails, entered_by: userName });
+     
+
     // console.log(username);
   };
 
@@ -323,47 +425,37 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
         LoanApplicationDetailsService.findByPanNumber(checkDedupePan)
           .then((res) => {
             checkDedupeNotifyFailure();
-            
-            setcheckDedupePan({ panNumber : ""})
+
             // console.log(res.status);
           })
           .catch((error) => {
             // console.log(error);
             // console.log("Okay to go");
             checkDedupeNotifySuccess();
-            setcheckDedupePan({ panNumber : ""})
-
           });
       } catch (error) {
         console.log("Exception in Axios server");
       }
     }
   };
-
-
-
-
-
-
-
-  // console.log(pincodeData);
-
   // Saving and validation User details on save button clicked
-
+// console.log("Before going into saveDetains fn");
+//   console.log(displayUserDetails);
   const saveUserDetails = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     // console.log("save user clicked");
-  
     updateEnteredBy();
-    panValue = userDetails.panNumber;
-    adharValue = userDetails.adhar_number;
-    gstValue = userDetails.gstnumber;
-    emailValue = userDetails.email_id;
-    mobilenoValue = userDetails.mobileno;
-   
+    panValue = displayUserDetails.panNumber;
+    adharValue = displayUserDetails.adhar_number;
+    gstValue = displayUserDetails.gstnumber;
+    emailValue = displayUserDetails.email_id;
+    mobilenoValue = displayUserDetails.mobileno;
     // console.log(adharValue);
-    
+
     // console.log(mobilenoValue);
+   
+    // console.log(displayUserDetails);
+
     if (!validMobno.test(mobilenoValue)) {
       // console.log("Mob no not valid");
       validMobNotify();
@@ -386,13 +478,17 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
       validEmailNotify();
       UserDetailsNOTSavedNotify();
     } else {
-      console.log(userDetails);
-      // setlastModifiedDate({...lastModifiedDate, last_modified_date: todays_DateWith_Time});
-      LoanApplicationDetailsService.saveDetails(userDetails)
+      // console.log("State before setting into DB");
+      // console.log(displayUserDetails);
+console.log("Display state before setting into DB");
+     console.log(displayUserDetails);
+      LoanApplicationDetailsService.saveDetails(displayUserDetails)
         .then((res) => {
           if (res.status == 201) {
-            UserDetailsSavedNotify();
-            console.log("User Details saved successfully");
+            // console.log("State after saving into DB");
+            // console.log(displayUserDetails);
+            updateSuccessfullyMessage();
+            console.log("User Details Updated successfully");
 
             LoanApplicationDetailsService.findByStatus(currentStatus)
               .then((res) => {
@@ -409,16 +505,16 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                 UserDetailsNOTSavedNotify();
               });
 
-            setuserDetails({
+            setdisplayUserDetails({
               sourcing_location: "",
               sales_person: "",
               credit_manager: "",
-              entrydate: todays_DateWith_Time,
+              entrydate: entry_Date,
               date: "",
               panNumber: "",
               adhar_number: "",
               loan_product: "",
-              loan_application_date: todays_DateWith_Time,
+              loan_application_date: "",
               requested_loan_amount: "",
               loan_tenure: "",
               loan_purpose: "",
@@ -437,8 +533,8 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
               firm_constitution: "",
               industry_type: "",
               entered_by: userName,
-              entered_on: todays_DateWith_Time,
-              last_modified_date: todays_DateWith_Time,
+              entered_on: entry_Date,
+              last_modified_date: entry_Date,
               status: currentStatus,
             });
           }
@@ -449,6 +545,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
         });
     }
   };
+
 
   const handleDatepickerChangeOnChange = (value) => {
     setdatepicker(value);
@@ -462,13 +559,13 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
 
   // Buttion function Handled
 
-  const onEditHandled = () => {
-    alert("Edit Button clicked ");
-  };
+
   const onDeleteHandled = () => {
     alert("Data Deleted Successfully");
   };
- 
+  const onExitHandled = () => {
+    alert("Exit function called");
+  };
 
   const changeFirstApplicantno = (e) => {
     setApplicantnoSecond(e.target.value);
@@ -483,8 +580,8 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
   return (
     <>
      <LogoNavbar data = {userName} />
-      <h3 className="d-flex justify-content-center">
-        Loan Application Details
+      <h3 className="d-flex justify-content-center" >
+       Update Loan Application Details
       </h3>
 
       <div className="Form-Box">
@@ -495,12 +592,51 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
 
               <div className="form-group">
                 <div className="row">
+                <div className="col-sm-12">
+                          <label className="control-label">
+                            Loan Application Number:
+                          </label>
+                          <div className="input-group mb-3">
+                            <input
+                              type="text"
+                              onInput={(e) => {
+                                if (e.target.value.length > e.target.maxLength)
+                                  e.target.value = e.target.value.slice(
+                                    0,
+                                    e.target.maxLength
+                                  );
+                              }}
+                              maxLength={12}
+                             
+                             
+                              onChange={(e) =>
+                                handleOnchangeForLoanApplicationSearch(e)
+                              }
+                              value={
+                                loanApplicationNumbertoSearch.loanApplicationNumber
+                              }
+                              className="form-control noscroll"
+                              name="loanApplicationNumber"
+                            />
+                            <div className="input-group-append">
+                              <button
+                                onClick={OnSearchHandle}
+                                className="btn btn-primary"
+                                type="button"
+                              
+                              >
+                                Search
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
                   <div className="col-sm-4">
                     <label className="control-label">Sourcing Location</label>
                     <select
                       name="sourcing_location"
                       onChange={(e) => handleFormValueChange(e)}
-                      value={userDetails.sourcing_location}
+                      value={displayUserDetails.sourcing_location}
                       className="form-control selectpicker"
                     >
                       <option value="">Please select your Location</option>
@@ -543,7 +679,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       name="state"
                       options={updatedStates("101")}
                       // onChange={handleFormValueChange}
-                      value={values.state}
+                      value={displayUserDetails.state}
                       onChange={(value) => {
                         setValues({ state: value, city: null }, false);
                       }}
@@ -559,7 +695,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       options={updatedCities(
                         values.state ? values.state.value : null
                       )}
-                      value={values.city}
+                      value={displayUserDetails.city}
                       onChange={(value) => setFieldValue("city", value)}
                     />
                   </div>
@@ -574,14 +710,16 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       name="sales_person"
                       className="form-control selectpicker"
                       onChange={(e) => handleFormValueChange(e)}
-                      value={userDetails.sales_person}
+                      value={displayUserDetails.sales_person}
                     >
                       <option value="">Please select a Sales Person</option>
                       <option>Santosh Chavan</option>
-                      <option>Amit </option>
-                      <option>Raj </option>
-                      <option>Nitin </option>
-                     
+                      <option>Amit Sir</option>
+                      <option>Raj Sir</option>
+                      <option>Nitin Sir</option>
+                      <option>XYZ</option>
+                      <option>XYZ</option>
+                      <option>XYZ</option>
                     </select>
                   </div>
                   <div className="col-sm-6">
@@ -592,12 +730,12 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       name="credit_manager"
                       className="form-control selectpicker"
                       onChange={(e) => handleFormValueChange(e)}
-                      value={userDetails.credit_manager}
+                      value={displayUserDetails.credit_manager}
                     >
                       <option value="">Please select a Credit Person</option>
-                      <option>Aakanksha Navle</option>
-                      <option>Anukriti Acharya</option>
-                      <option>Gourav Ghuge</option>
+                      <option>Ms.Aakanksha Navle</option>
+                      <option>Ms.Anukriti Acharya</option>
+                      <option>Mr.Gourav Ghuge</option>
                     </select>
                   </div>
                 </div>
@@ -612,7 +750,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       name="loan_product"
                       className="form-control selectpicker"
                       onChange={(e) => handleFormValueChange(e)}
-                      value={userDetails.loan_product}
+                      value={displayUserDetails.loan_product}
                     >
                       <option value="">Please select your Loan Product</option>
                       <option>Bussiness Loan</option>
@@ -645,7 +783,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                         name="loan_application_date"
                         className="form-control"
                         selected={datepicker}
-                        value={datepicker}
+                        value={displayUserDetails.loan_app_date}
                         dateFormat="yyyy-MM-dd"
                         onChange={handleDatepickerChangeOnChange}
 
@@ -671,7 +809,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                     <input
                       type="number"
                       onChange={(e) => handleFormValueChange(e)}
-                      value={userDetails.requested_loan_amount}
+                      value={displayUserDetails.requested_loan_amount}
                       name="requested_loan_amount"
                       className="form-control noscroll"
                     />
@@ -690,7 +828,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                           );
                       }}
                       onChange={(e) => handleFormValueChange(e)}
-                      value={userDetails.loan_tenure}
+                      value={displayUserDetails.loan_tenure}
                       name="loan_tenure"
                       maxLength={3}
                       className="form-control noscroll"
@@ -708,7 +846,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       rows="5"
                       name="loan_purpose"
                       onChange={(e) => handleFormValueChange(e)}
-                      value={userDetails.loan_purpose}
+                      value={displayUserDetails.loan_purpose}
                     ></textarea>
                   </div>
                   {/* <div className="col-sm-12">
@@ -723,7 +861,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
               <div className="ApplicantForm">
                 <hr className="divider mt-0" />
                 <h3 className="d-flex justify-content-center ApplicantDetailsHeading">
-                  Applicant Details
+                Update Applicant Details
                 </h3>
                 <div className="form-group">
                   <div className="row">
@@ -748,6 +886,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                           name="panNumber"
                           onChange={(e) => handleOnchangeForcheckDepupde(e)}
                           value={checkDedupePan.panNumber}
+
                         />
                         <div className="input-group-append">
                           <button
@@ -797,7 +936,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       <select
                         type="Text"
                         onChange={(e) => handleFormValueChange(e)}
-                        value={userDetails.applicant_type}
+                        value={displayUserDetails.applicant_type}
                         name="applicant_type"
                         className="form-control"
                       >
@@ -814,7 +953,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       <select
                         type="Text"
                         onChange={(e) => handleFormValueChange(e)}
-                        value={userDetails.applicant_occuption}
+                        value={displayUserDetails.applicant_occuption}
                         name="applicant_occuption"
                         className="form-control"
                       >
@@ -839,7 +978,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       <select
                         type="Text"
                         onChange={(e) => handleFormValueChange(e)}
-                        value={userDetails.title}
+                        value={displayUserDetails.title}
                         name="title"
                         className="form-control"
                       >
@@ -857,7 +996,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       <input
                         type="Text"
                         onChange={(e) => handleFormValueChange(e)}
-                        value={userDetails.applicant_name}
+                        value={displayUserDetails.applicant_name}
                         name="applicant_name"
                         className="form-control"
                       />
@@ -877,7 +1016,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                         rows="3"
                         name="applicant_address"
                         onChange={(e) => handleFormValueChange(e)}
-                        value={userDetails.applicant_address}
+                        value={displayUserDetails.applicant_address}
                       ></textarea>
                     </div>
                     {/* <div className="col-sm-12">
@@ -894,14 +1033,13 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                   </div>
                 </div>
 
-                <div className="form-group">
+                {/* <div className="form-group">
                   <PincodeCompo
                     invalidError="Please Enter a valid pincode"
                     lengthError="Pincode Length must be of 6 digits"
                     getData={(data) => setPincodeData(data)}
-                   
                   />
-                </div>
+                </div> */}
 
                 <div className="form-group">
                   <div className="row">
@@ -917,7 +1055,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                             );
                         }}
                         onChange={(e) => handleFormValueChange(e)}
-                        value={userDetails.mobileno}
+                        value={displayUserDetails.mobileno}
                         name="mobileno"
                         maxLength={10}
                         className="form-control noscroll"
@@ -941,7 +1079,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                         className="form-control"
                         aria-describedby="emailHelp"
                         onChange={(e) => handleFormValueChange(e)}
-                        value={userDetails.email_id}
+                        value={displayUserDetails.email_id}
                       />
                       <span
                         style={{
@@ -969,7 +1107,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                             );
                         }}
                         onChange={(e) => handleFormValueChange(e)}
-                        value={userDetails.panNumber}
+                        value={displayUserDetails.panNumber}
                         name="panNumber"
                         maxLength={10}
                         className="form-control"
@@ -987,7 +1125,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                             );
                         }}
                         onChange={(e) => handleFormValueChange(e)}
-                        value={userDetails.adhar_number}
+                        value={displayUserDetails.adhar_number}
                         name="adhar_number"
                         maxLength={12}
                         className="form-control noscroll"
@@ -998,7 +1136,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       <input
                         type="Text"
                         onChange={(e) => handleFormValueChange(e)}
-                        value={userDetails.gstnumber}
+                        value={displayUserDetails.gstnumber}
                         name="gstnumber"
                         maxLength={15}
                         className="form-control"
@@ -1016,7 +1154,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       <input
                         type="Text"
                         onChange={(e) => handleFormValueChange(e)}
-                        value={userDetails.firm_name}
+                        value={displayUserDetails.firm_name}
                         name="firm_name"
                         className="form-control"
                       />
@@ -1034,7 +1172,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       <select
                         type="Text"
                         onChange={(e) => handleFormValueChange(e)}
-                        value={userDetails.firm_constitution}
+                        value={displayUserDetails.firm_constitution}
                         name="firm_constitution"
                         className="form-control"
                       >
@@ -1055,7 +1193,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       <select
                         type="Text"
                         onChange={(e) => handleFormValueChange(e)}
-                        value={userDetails.industry_type}
+                        value={displayUserDetails.industry_type}
                         name="industry_type"
                         className="form-control"
                       >
@@ -1111,66 +1249,65 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                 </div> */}
 
                 {/* <!-- Modal --> */}
-                <div
-                  class="modal fade"
+                {/* <div
+                  className="modal fade"
                   id="exampleModal"
                   tabindex="-1"
                   role="dialog"
                   aria-labelledby="exampleModalLabel"
                   aria-hidden="true"
                 >
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">
+                  <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">
                           Your Loan Application Number:
                         </h5>
                         <button
                           type="button"
-                          class="close"
+                          className="close"
                           data-dismiss="modal"
                           aria-label="Close"
                         >
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                      <div class="modal-body">
+                      <div className="modal-body">
                         <span>lap no here</span>
                       </div>
-                      <div class="modal-footer">
+                      <div className="modal-footer">
                         <button
                           type="button"
-                          class="btn btn-secondary"
+                          className="btn btn-secondary"
                           data-dismiss="modal"
                         >
                           Close
                         </button>
-                        <button type="button" class="btn btn-primary">
+                        <button type="button" className="btn btn-primary">
                           Save changes
                         </button>
                       </div>
                     </div>
                   </div>
-                </div>
-
-                {/********************************8* Delete Modal ***************************************************************/}
-                <div class="modal fade" id="myModal" role="dialog">
-                  <div class="modal-dialog ">
+                </div> */}
+    {/********************************8* Delete Modal ***************************************************************/}
+    <div className="modal fade" id="myModal" role="dialog">
+                  <div className="modal-dialog ">
                     {/* <!-- Modal content start--> */}
-                    <div class="modal-content">
-                      <div class="modal-header">
+                    <div className="modal-content">
+                      <div className="modal-header">
                         <button
                           type="button"
-                          class="close"
+                          className="close"
                           data-dismiss="modal"
                         >
                           &times;
                         </button>
-                        <h5 class="modal-title">
+                        <h5 className="modal-title">
                           Enter LAN to Delete Details.          
                         </h5>
                       </div>
-                      <div class="modal-body">
+                      <div className="modal-body">
                         <form name="jksearch" target="_blank" method="get" />
 
                         <div className="col-sm-12">
@@ -1204,7 +1341,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                                 className="btn btn-danger"
                                 type="button"
                                 data-bs-toggle="modal"
-                                data-bs-target="#my-modal"
+                                data-target="#my-modal"
                               >
                                 Delete
                               </button>
@@ -1216,7 +1353,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                         <br />
                         <input id="hiddenquery" type="hidden" name="q" />
                          <input
-                         class="form-control"
+                         className="form-control"
                           name="qfront"
                           type= "text"
                           style= {{width: "300px"}}
@@ -1234,10 +1371,10 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                         </div> */}
                         <form />
                       </div>
-                      <div class="modal-footer">
+                      <div className="modal-footer">
                         <button
                           type="button"
-                          class="btn btn-default"
+                          className="btn btn-default"
                           data-dismiss="modal"
                         >
                           Close
@@ -1246,6 +1383,7 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                     </div>
                   </div>
                 </div>
+               
 
                 <div className="form-group">
                   <div className="row">
@@ -1262,18 +1400,16 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       </button>
                     </div>
                     <div className="col-sm-3">
-                      <Link   to={`/edituser`}
+                    <Link   to={`/edituser`}
                         type="button"
                         className="btn btn-warning fourButtons"
                       
-                        // data-toggle="modal"
-                        // data-target="#myModal"
                       >
                         <i className="bi-pencil"></i> Edit
                       </Link>
                     </div>
                     <div className="col-sm-3">
-                      <button
+                    <button
                         type="button"
                         className="btn btn-danger fourButtons"
                         // onClick={onDeleteHandled}
@@ -1284,11 +1420,12 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
                       </button>
                     </div>
                     <div className="col-sm-3">
-                    <Link
+                      <Link
                       to={`/home`}
+                        type="button"
                         id="exitButton"
                         className="btn btn-secondary fourButtons"
-                      
+                        
                       >
                         <i className="bi bi-x-circle"></i> Exit
                       </Link>
@@ -1307,4 +1444,4 @@ const [lastModifiedDate, setlastModifiedDate] = useState({
   );
 };
 
-export default LoanApplicationDetails;
+export default EditLoanApplicationDetails;
