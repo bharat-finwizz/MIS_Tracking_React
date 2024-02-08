@@ -49,7 +49,7 @@ const [usernamewhenloggedIn, setUsernamewhenloggedIn] = useState('')
 
   const Login = async (e) => {
     e.preventDefault();
-
+    // console.log(e);
 // try {
 //   LoanApplicationDetailsService.userLogin(login).then((res) =>{
 // if(res.status==200){
@@ -85,9 +85,11 @@ const [usernamewhenloggedIn, setUsernamewhenloggedIn] = useState('')
       return await LoanApplicationDetailsService.executeBasicAuthenticationService(
         login.username,
         login.password
+        
+
       )
         .then((response) => {
-          // console.log(response);
+          console.log("basic auth serive response" +response);
           setUsernamewhenloggedIn(response.data);
 // console.log(usernamewhenloggedIn);
 successtoast();

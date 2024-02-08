@@ -37,7 +37,8 @@ class LoanApplicationDetailsService {
   }
 
   executeBasicAuthenticationService(username, password) {
-    return axios.get(`${API}/login`, {
+    console.log(username + ":" + password);
+    return axios.post(`${API}/login`, {
       headers: { authorization: this.createBasicAuthToken(username, password) },
     });
   }
